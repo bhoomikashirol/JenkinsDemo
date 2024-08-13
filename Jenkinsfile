@@ -1,9 +1,9 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout SCM') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/bhoomikashirol/JenkinsDemo.git'
+                git branch: 'main', url: 'https://github.com/bhoomikashirol/JenkinsDemo.git'
             }
         }
         stage('Clean Build Directory') {
@@ -25,8 +25,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cp -r /Documents/build /var/lib/jenkins/workspace/PipelineScriptDemo(SCM)/build
-                    cd /var/lib/jenkins/workspace/PipelineDemo                    
+                    cp -r /Documents/build /var/lib/jenkins/workspace/PipelineDemo/build
+                    cd /var/lib/jenkins/workspace/PipelineDemo
                     git add build
                     git commit -m "Add build folder"
                     git push origin main
