@@ -1,37 +1,43 @@
 pipeline {
     agent any
-
     stages {
-        stage('Clean Build Directory') {
+        stage('Checkout SCM') {
             steps {
-                script {
-                    dir('build') {
-                        sh 'rm -rf *'
-                    }
-                }
+                git 'https://github.com/bhoomikashirol/JenkinsDemo.git'
             }
         }
-        stage('Checkout') {
+        stage('Clean Build Directory') {
             steps {
-                git url: 'https://github.com/bhoomikashirol/JenkinsDemo.git', branch: 'main'
+                dir('build') {
+                    deleteDir()
+                }
             }
         }
         stage('Build') {
             steps {
+                dir('build') {
+                    sh 'cmake ..'
+                    sh 'make'
+                }
+            }
+        }
+        stage('Add Build Folder to Git') {
+            steps {
                 script {
-                    dir('build') {
-                        sh 'cmake ..'
-                        sh 'make'
-                    }
+                    sh '''
+                    cp -r /Documents/build /var/lib/jenkins/workspace/PipelineScriptDemo(SCM)/build
+                    cd /var/lib/jenkins/workspace/PipelineDemo                    
+                    git add build
+                    git commit -m "Add build folder"
+                    git push origin main
+                    '''
                 }
             }
         }
         stage('Test') {
             steps {
-                script {
-                    dir('build') {
-                        sh './unit_test'
-                    }
+                dir('build') {
+                    sh 'ctest'
                 }
             }
         }
