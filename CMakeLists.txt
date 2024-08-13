@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 # Set the project name
 project(HelloWorld)
 
-# Add the executable for the main code
-add_executable(HelloWorld Code/Code.cpp)
+# Add the library for the main code
+add_library(HelloWorldLib Code/Code.cpp)
 
 # Include the header files
 include_directories(Code)
@@ -17,5 +17,5 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 target_link_libraries(HelloWorldTest ${GTEST_LIBRARIES} pthread)
 
-# Link the main code with the test executable
-target_link_libraries(HelloWorldTest HelloWorld)
+# Link the main code library with the test executable
+target_link_libraries(HelloWorldTest HelloWorldLib)
