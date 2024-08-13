@@ -1,41 +1,41 @@
 pipeline {
     agent any
-
     stages {
-        stage('Preparation') {
+        stage('Clone Repository') {
             steps {
-                // Clean up workspace
-                cleanWs()
-                
-                // Clone the public repository
-                git branch: 'main', url: 'https://github.com/bhoomika-shirol/JenkinsDemo.git'
+                sh 'git clone -b Code https://github.com/bhoomikashirol/JenkinsDemo.git'
             }
         }
-        
+        stage('Clean Build Directory') {
+            steps {
+                dir('JenkinsDemo/build') {
+                    deleteDir()
+                }
+            }
+        }
         stage('Build') {
             steps {
-                sh '''
-                    mkdir -p build
-                    cd build
-                    cmake ..
-                    make
-                '''
+                dir('JenkinsDemo/build') {
+                    sh 'cmake ..'
+                    sh 'make'
+                }
             }
         }
-        
-        stage('Test') {
+        stage('Run Cppcheck') {
             steps {
-                sh '''
-                    cd build
-                    ./unit_test
-                '''
+                dir('JenkinsDemo') {
+                    sh 'cppcheck --xml --xml-version=2 . 2> cppcheck-report.xml'
+                }
+            }
+        }
+        stage('Publish Cppcheck Results') {
+            steps {
+                recordIssues tools: [cppCheck(pattern: 'JenkinsDemo/cppcheck-report.xml')]
             }
         }
     }
-    
     post {
         always {
-            // Clean up workspace at the end
             cleanWs()
         }
     }
