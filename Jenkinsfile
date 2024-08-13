@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/your-repo/PipelineDemo.git', branch: 'main'
+                git url: 'https://github.com/bhoomikashirol/JenkinsDemo.git', branch: 'main'
             }
         }
         stage('Build') {
