@@ -1,0 +1,1 @@
+/usr/bin/c++ -O0 -fprofile-arcs -ftest-coverage   -lgcov CMakeFiles/unit_test.dir/src/Crc_8.c.o CMakeFiles/unit_test.dir/src/Crc_16.c.o CMakeFiles/unit_test.dir/src/Crc_32.c.o CMakeFiles/unit_test.dir/src/Crc_GetVersionInfo.c.o CMakeFiles/unit_test.dir/test/UT/UT.cpp.o -o unit_test  lib/libgtest_main.a lib/libgmock_main.a lib/libgmock.a lib/libgtest.a 
