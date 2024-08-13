@@ -2,11 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/your-repo/JenkinsDemo.git', branch: 'main'
-            }
-        }
         stage('Clean Build Directory') {
             steps {
                 script {
@@ -14,6 +9,11 @@ pipeline {
                         sh 'rm -rf *'
                     }
                 }
+            }
+        }
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/your-repo/JenkinsDemo.git', branch: 'main'
             }
         }
         stage('Build') {
