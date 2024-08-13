@@ -7,8 +7,8 @@ pipeline {
                 // Clean up workspace
                 cleanWs()
                 
-                // Clone the repository
-                git branch: 'main', url: 'https://github.com/your-username/JenkinsDemo.git'
+                // Clone the public repository
+                git branch: 'main', url: 'https://github.com/bhoomika-shirol/JenkinsDemo.git'
             }
         }
         
