@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/your-repo/JenkinsDemo.git', branch: 'main'
+                git url: 'https://github.com/your-repo/PipelineDemo.git', branch: 'main'
             }
         }
         stage('Build') {
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     dir('build') {
-                        sh './runTests'
+                        sh './unit_test'
                     }
                 }
             }
