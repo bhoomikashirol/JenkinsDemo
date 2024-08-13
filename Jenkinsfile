@@ -1,45 +1,42 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout SCM') {
+        stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/bhoomikashirol/JenkinsDemo.git'
+                sh 'git clone -b Code https://github.com/bhoomikashirol/JenkinsDemo.git'
             }
         }
         stage('Clean Build Directory') {
             steps {
-                dir('build') {
+                dir('JenkinsDemo/build') {
                     deleteDir()
                 }
             }
         }
         stage('Build') {
             steps {
-                dir('build') {
+                dir('JenkinsDemo/build') {
                     sh 'cmake ..'
                     sh 'make'
                 }
             }
         }
-        stage('Add Build Folder to Git') {
+        stage('Run Cppcheck') {
             steps {
-                script {
-                    sh '''
-                    cp -r /Documents/build /var/lib/jenkins/workspace/PipelineDemo/build
-                    cd /var/lib/jenkins/workspace/PipelineDemo
-                    git add build
-                    git commit -m "Add build folder"
-                    git push origin main
-                    '''
+                dir('JenkinsDemo') {
+                    sh 'cppcheck --xml --xml-version=2 . 2> cppcheck-report.xml'
                 }
             }
         }
-        stage('Test') {
+        stage('Publish Cppcheck Results') {
             steps {
-                dir('build') {
-                    sh 'ctest'
-                }
+                recordIssues tools: [cppCheck(pattern: 'JenkinsDemo/cppcheck-report.xml')]
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()
         }
     }
 }
