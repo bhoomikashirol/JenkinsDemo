@@ -15,7 +15,7 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 include_directories(inc)
 
 # Include Dependent Libraries
-add_subdirectory(CRC_UT/googletest-main)
+add_subdirectory(/var/lib/jenkins/workspace/PipelineDemo/CRC_UT/CRC_UT/googletest-main)
 
 # Main Post Processing Code
 set(MAIN_SOURCE
