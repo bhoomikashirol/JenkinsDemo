@@ -15,24 +15,19 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 include_directories(inc)
 
 # Include Dependent Libraries
-# find_package(GTest REQUIRED)
-# include_directories(${GTEST_INCLUDE_DIRS})
-# enable_testing()
-add_subdirectory(googletest-main)
+add_subdirectory(CRC_UT/googletest-main)
 
 # Main Post Processing Code
 set(MAIN_SOURCE
     src/Code.cpp
 )
 
-
-#UNIT_TEST
+# UNIT_TEST
 set(UT_SRC 
     ${MAIN_SOURCE}
-    test/UT/UT.cpp  
-   )
-
+    CRC_UT/test/UT.cpp  
+)
 
 # Gtest - UT
 add_executable(unit_test ${UT_SRC})
-target_link_libraries(unit_test  GTest::gtest_main GTest::gmock_main) 
+target_link_libraries(unit_test GTest::gtest_main GTest::gmock_main)
