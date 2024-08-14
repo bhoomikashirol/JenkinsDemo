@@ -18,15 +18,10 @@ include_directories(inc)
 add_subdirectory(/var/lib/jenkins/workspace/PipelineDemo/CRC_UT/CRC_UT/googletest-main)
 
 # Main Post Processing Code
-set(MAIN_SOURCE
-    src/Code.cpp
-)
+set(MAIN_SRC /var/lib/jenkins/workspace/PipelineDemo/CRC_UT/CRC_UT/src/Code.cpp)
 
 # UNIT_TEST
-set(UT_SRC 
-    ${MAIN_SOURCE}
-    CRC_UT/test/UT.cpp  
-)
+set(UT_SRC /var/lib/jenkins/workspace/PipelineDemo/CRC_UT/CRC_UT/test/UT/UT.cpp)
 
 # Gtest - UT
 add_executable(unit_test ${UT_SRC})
