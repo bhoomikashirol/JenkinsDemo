@@ -1,26 +1,38 @@
-cmake_minimum_required(VERSION 3.10)
-project(JenkinsDemo)
+cmake_minimum_required(VERSION 3.5)
+project(crc_8 VERSION 2.0)
 
-# Set the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Add the source files
-add_executable(unit_test
-    ${CMAKE_SOURCE_DIR}/Code/Code.cpp
-    ${CMAKE_SOURCE_DIR}/CRC_UT/CRC_UT/test/UT.cpp
+SET(CMAKE_CXX_FLAGS "-O0")
+SET(CMAKE_C_FLAGS "-O0")
+SET(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage ")
+SET(GCC_COVERAGE_LINK_FLAGS "-lgcov")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
+# Include Header Files
+include_directories(inc)
+
+# Include Dependent Libraries
+# find_package(GTest REQUIRED)
+# include_directories(${GTEST_INCLUDE_DIRS})
+# enable_testing()
+add_subdirectory(googletest-main)
+
+# Main Post Processing Code
+set(MAIN_SOURCE
+    src/Code.cpp
 )
 
-# Include directories
-include_directories(${CMAKE_SOURCE_DIR}/Code)
-include_directories(${CMAKE_SOURCE_DIR}/CRC_UT/src)
 
-# Link GTest library
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-target_link_libraries(unit_test ${GTEST_LIBRARIES} pthread)
+#UNIT_TEST
+set(UT_SRC 
+    ${MAIN_SOURCE}
+    test/UT/UT.cpp  
+   )
 
-# Set the output directory for the build files
-set_target_properties(unit_test PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build
-)
+
+# Gtest - UT
+add_executable(unit_test ${UT_SRC})
+target_link_libraries(unit_test  GTest::gtest_main GTest::gmock_main) 
