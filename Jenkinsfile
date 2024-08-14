@@ -18,7 +18,7 @@ pipeline {
                     }
                     
                     // Checkout the Test branch
-                    dir('CRC_UT') {
+                    dir('Test') {
                         checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
                     }
                 }
