@@ -1,6 +1,6 @@
 // UT.cpp
 #include "gtest/gtest.h"
-#include "../../inc/Code.h"
+#include "Code.h"
  
 TEST(HelloWorldTest, OutputCheck) {
     testing::internal::CaptureStdout();
