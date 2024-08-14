@@ -10,16 +10,16 @@ pipeline {
             steps {
                 script {
                     // Checkout the main branch
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/your-repo-url.git']]])
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
                     
                     // Checkout the Code branch
                     dir('Code') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: 'https://github.com/your-repo-url.git']]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
                     }
                     
                     // Checkout the Test branch
                     dir('CRC_UT') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: 'https://github.com/your-repo-url.git']]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
                     }
                 }
             }
