@@ -1,53 +1,57 @@
 pipeline {
     agent any
 
+    environment {
+        BUILD_DIR = "${WORKSPACE}/build"
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                cleanWs()
-                sh 'git clone https://github.com/bhoomikashirol/JenkinsDemo.git'
+                script {
+                    // Checkout the main branch
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/your-repo-url.git']]])
+                    
+                    // Checkout the Code branch
+                    dir('Code') {
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: 'https://github.com/your-repo-url.git']]])
+                    }
+                    
+                    // Checkout the Test branch
+                    dir('CRC_UT') {
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: 'https://github.com/your-repo-url.git']]])
+                    }
+                }
             }
         }
 
         stage('Build') {
             steps {
-                dir('JenkinsDemo') {
-                    sh '''
-                        mkdir -p build
-                        cd build
-                        cmake ..
-                        make
-                    '''
+                script {
+                    // Create the build directory
+                    sh 'mkdir -p ${BUILD_DIR}'
+                    
+                    // Run CMake and build
+                    sh 'cmake -S . -B ${BUILD_DIR}'
+                    sh 'cmake --build ${BUILD_DIR}'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                dir('JenkinsDemo/build') {
-                    sh './unit_test'
+                script {
+                    // Run the unit tests
+                    sh '${BUILD_DIR}/unit_test'
                 }
-            }
-        }
-
-        stage('Run Cppcheck') {
-            steps {
-                dir('JenkinsDemo') {
-                    sh 'cppcheck --enable=all --inconclusive --xml --xml-version=2 . 2> cppcheck_results.xml'
-                }
-            }
-        }
-
-        stage('Publish Cppcheck Results') {
-            steps {
-                publishCppcheck pattern: 'JenkinsDemo/cppcheck_results.xml'
             }
         }
     }
 
     post {
         always {
-            cleanWs()
+            // Archive the build files
+            archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
         }
     }
 }
