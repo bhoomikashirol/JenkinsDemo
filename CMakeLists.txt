@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add the source files
 add_executable(unit_test
     ${CMAKE_SOURCE_DIR}/Code/Code.cpp
-    ${CMAKE_SOURCE_DIR}/CRC_UT/test/UT.cpp
+    ${CMAKE_SOURCE_DIR}/CRC_UT/CRC_UT/test/UT.cpp
 )
 
 # Include directories
