@@ -72,7 +72,7 @@ pipeline {
                     sh 'git commit -m "Automated commit message"'
                     
                     // Push the changes to the respective branch
-                    sh 'git push https://github.com/bhoomikashirol/JenkinsDemo.git Code'
+                    sh 'git push https://github.com/bhoomikashirol/JenkinsDemo.git main'
                     sh 'git push https://github.com/bhoomikashirol/JenkinsDemo.git Test'
                 }
             }
