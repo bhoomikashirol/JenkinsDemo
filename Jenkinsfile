@@ -57,6 +57,45 @@ pipeline {
                 }
             }
         }
+
+        stage('Commit and Push Changes') {
+            steps {
+                script {
+                    // Add all changes
+                    sh 'git add .'
+                    
+                    // Commit the changes
+                    sh 'git commit -m "Automated commit message"'
+                    
+                    // Push the changes to the respective branch
+                    sh 'git push https://github.com/bhoomikashirol/JenkinsDemo.git Code'
+                    sh 'git push https://github.com/bhoomikashirol/JenkinsDemo.git Test'
+                }
+            }
+        }
+
+        stage('Push Build to Main') {
+            steps {
+                script {
+                    // Copy build files to a temporary directory
+                    sh 'cp -r ${BUILD_DIR} /tmp/build'
+
+                    // Checkout the main branch
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
+
+                    // Move the build files to the build directory in the main branch
+                    sh 'mkdir -p build'
+                    sh 'cp -r /tmp/build/* build/'
+
+                    // Add and commit the build files
+                    sh 'git add build'
+                    sh 'git commit -m "Add build files to main branch"'
+
+                    // Push the changes to the main branch
+                    sh 'git push https://github.com/bhoomikashirol/JenkinsDemo.git main'
+                }
+            }
+        }
     }
 
     post {
