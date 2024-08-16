@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     // Set Git user name and email
-                    sh 'git config --global user.email "bhoomikas0552@example.com"'
+                    sh 'git config --global user.email "bhoomikas0552@gmail.com"'
                     sh 'git config --global user.name " bhoomikashirol "'
                     
                     // Remove embedded repositories from the index
