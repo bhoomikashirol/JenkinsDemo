@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
+        REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
     }
 
     stages {
@@ -10,16 +11,16 @@ pipeline {
             steps {
                 script {
                     // Checkout the main branch
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL]]])
                     
                     // Checkout the Code branch
                     dir('Code') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: REPO_URL]]])
                     }
                     
                     // Checkout the Test branch
                     dir('Test') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: 'https://github.com/bhoomikashirol/JenkinsDemo.git']]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: REPO_URL]]])
                     }
                 }
             }
@@ -54,6 +55,30 @@ pipeline {
                 script {
                     // Run the unit tests
                     sh '${BUILD_DIR}/unit_test'
+                }
+            }
+        }
+
+        stage('Push to Git') {
+            steps {
+                script {
+                    // Navigate to the build directory
+                    dir("${BUILD_DIR}") {
+                        // Initialize Git repository if not already initialized
+                        sh 'git init'
+                        
+                        // Add remote repository
+                        sh 'git remote add origin ${REPO_URL}'
+                        
+                        // Add files to staging area
+                        sh 'git add .'
+                        
+                        // Commit the changes
+                        sh 'git commit -m "Add build folder contents"'
+                        
+                        // Push the changes to the main branch
+                        sh 'git push origin main'
+                    }
                 }
             }
         }
