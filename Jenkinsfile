@@ -67,8 +67,14 @@ pipeline {
                         // Initialize Git repository if not already initialized
                         sh 'git init'
                         
-                        // Add remote repository
-                        sh 'git remote add origin ${REPO_URL}'
+                        // Check if remote origin already exists and update it if necessary
+                        sh '''
+                        if git remote | grep -q origin; then
+                            git remote set-url origin ${REPO_URL}
+                        else
+                            git remote add origin ${REPO_URL}
+                        fi
+                        '''
                         
                         // Add files to staging area
                         sh 'git add .'
