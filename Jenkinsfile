@@ -39,7 +39,16 @@ pipeline {
             }
         }
 
-        
+        stage('Cppcheck') {
+            steps {
+                script {
+                    // Run Cppcheck
+                    sh 'cppcheck --enable=all --xml --xml-version=2 . 2> cppcheck.xml'
+                }
+                // Publish Cppcheck results
+                publishCppcheck pattern: 'cppcheck.xml'
+            }
+        }
 
         stage('Test') {
             steps {
@@ -49,17 +58,6 @@ pipeline {
                 }
                 // Publish test results
                 junit '**/test-results/*.xml'
-            }
-        }
-
-        stage('Cppcheck') {
-            steps {
-                script {
-                    // Run Cppcheck
-                    sh 'cppcheck --enable=all --xml --xml-version=2 . 2> cppcheck.xml'
-                }
-                // Publish Cppcheck results
-                publishCppcheck pattern: 'cppcheck.xml'
             }
         }
 
