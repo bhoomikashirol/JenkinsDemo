@@ -61,7 +61,7 @@ pipeline {
             }
         }
 
-        stage('Push to Git') {
+       /* stage('Push to Git') {
             steps {
                 script {
                     // Navigate to the build directory
@@ -83,6 +83,6 @@ pipeline {
                     }
                 }
             }
-        }
+        } */
     }
 }
