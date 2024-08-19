@@ -13,16 +13,6 @@ pipeline {
                 script {
                     // Checkout the main branch
                     checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
-                    
-                    // Checkout the Code branch
-                    dir('Code') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
-                    }
-                    
-                    // Checkout the Test branch
-                    dir('Test') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
-                    }
                 }
             }
         }
@@ -67,24 +57,16 @@ pipeline {
                 script {
                     // Navigate to the build directory
                     dir("${BUILD_DIR}") {
-                        // Check if the remote already exists
-                        def remoteExists = sh(script: 'git remote', returnStdout: true).trim().contains('origin')
+                        // Initialize a new Git repository in the build directory
+                        sh 'git init'
                         
-                        if (!remoteExists) {
-                            // Add remote repository
-                            sh 'git remote add origin ${REPO_URL}'
-                        }
-                        
-                        // Stash any unstaged changes
-                        sh 'git stash'
+                        // Add remote repository
+                        sh 'git remote add origin ${REPO_URL}'
                         
                         // Pull the latest changes from the remote repository with rebase
                         withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
                             sh 'git pull --rebase https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
                         }
-                        
-                        // Apply the stashed changes
-                        sh 'git stash pop'
                         
                         // Add files to staging area
                         sh 'git add .'
@@ -102,4 +84,3 @@ pipeline {
         }
     }
 }
-
