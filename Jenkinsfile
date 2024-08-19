@@ -61,16 +61,18 @@ pipeline {
             }
         }
 
-       stage('Push to Git') {
+        stage('Push to Git') {
             steps {
                 script {
                     // Navigate to the build directory
                     dir("${BUILD_DIR}") {
-                        // Initialize Git repository if not already initialized
-                        //sh 'git init'
+                        // Check if the remote already exists
+                        def remoteExists = sh(script: 'git remote', returnStdout: true).trim().contains('origin')
                         
-                        // Add remote repository
-                        sh 'git remote add origin ${REPO_URL}'
+                        if (!remoteExists) {
+                            // Add remote repository
+                            sh 'git remote add origin ${REPO_URL}'
+                        }
                         
                         // Add files to staging area
                         sh 'git add .'
@@ -83,6 +85,6 @@ pipeline {
                     }
                 }
             }
-        } 
+        }
     }
 }
