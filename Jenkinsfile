@@ -4,6 +4,7 @@ pipeline {
     environment {
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
+        GIT_CREDENTIALS_ID = '39d5396b-6f4d-48c0-9bd8-f736486f6e55 '
     }
 
     stages {
