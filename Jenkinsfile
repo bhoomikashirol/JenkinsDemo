@@ -68,10 +68,16 @@ pipeline {
                             sh 'git remote add origin ${REPO_URL}'
                         }
                         
+                        // Stash any unstaged changes
+                        sh 'git stash'
+                        
                         // Pull the latest changes from the remote repository with rebase
                         withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
                             sh 'git pull --rebase https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
                         }
+                        
+                        // Apply the stashed changes
+                        sh 'git stash pop'
                         
                         // Add files to staging area
                         sh 'git add .'
@@ -89,3 +95,4 @@ pipeline {
         }
     }
 }
+
