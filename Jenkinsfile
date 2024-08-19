@@ -76,8 +76,11 @@ pipeline {
                         // Commit the changes
                         sh 'git commit -m "Add build folder contents"'
                         
+                        // Create the main branch if it doesn't exist
+                        sh 'git branch -M main'
+                        
                         // Push the changes to the main branch
-                        sh 'git push origin main'
+                        sh 'git push -u origin main'
                     }
                 }
             }
