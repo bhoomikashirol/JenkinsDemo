@@ -75,6 +75,11 @@ pipeline {
                             sh 'git remote add origin ${REPO_URL}'
                         }
                         
+                        // Pull the latest changes from the remote repository
+                        withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
+                            sh 'git pull https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
+                        }
+                        
                         // Add files to staging area
                         sh 'git add .'
                         
