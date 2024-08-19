@@ -67,7 +67,7 @@ pipeline {
                     // Navigate to the build directory
                     dir("${BUILD_DIR}") {
                         // Initialize Git repository if not already initialized
-                        sh 'git init'
+                        //sh 'git init'
                         
                         // Add remote repository
                         sh 'git remote add origin ${REPO_URL}'
