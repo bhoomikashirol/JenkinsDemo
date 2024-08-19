@@ -57,7 +57,7 @@ pipeline {
                     sh '${BUILD_DIR}/unit_test'
                 }
                 // Publish test results
-                 junit '**/build/test-results/*.xml'
+                 //junit '**/build/test-results/*.xml'
             }
         }
 
