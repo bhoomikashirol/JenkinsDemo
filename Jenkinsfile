@@ -75,9 +75,9 @@ pipeline {
                             sh 'git remote add origin ${REPO_URL}'
                         }
                         
-                        // Pull the latest changes from the remote repository
+                        // Pull the latest changes from the remote repository with rebase
                         withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
-                            sh 'git pull https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
+                            sh 'git pull --rebase https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
                         }
                         
                         // Add files to staging area
