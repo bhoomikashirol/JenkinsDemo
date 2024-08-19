@@ -4,7 +4,7 @@ pipeline {
     environment {
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
-        GIT_CREDENTIALS_ID = '39d5396b-6f4d-48c0-9bd8-f736486f6e55 '
+        GIT_CREDENTIALS_ID = 'github-pat' // Replace with your actual credentials ID
     }
 
     stages {
@@ -12,16 +12,16 @@ pipeline {
             steps {
                 script {
                     // Checkout the main branch
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL]]])
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
                     
                     // Checkout the Code branch
                     dir('Code') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: REPO_URL]]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Code']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
                     }
                     
                     // Checkout the Test branch
                     dir('Test') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: REPO_URL]]])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
                     }
                 }
             }
@@ -82,7 +82,9 @@ pipeline {
                         sh 'git commit -m "Add build folder contents"'
                         
                         // Push the changes to the main branch
-                        sh 'git push origin main'
+                        withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
+                            sh 'git push https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
+                        }
                     }
                 }
             }
