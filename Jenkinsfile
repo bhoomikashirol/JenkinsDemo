@@ -1,6 +1,3 @@
-Sure, here's the updated Jenkins pipeline script without the post archive artifacts step:
-
-```groovy
 pipeline {
     agent any
 
