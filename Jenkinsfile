@@ -39,6 +39,17 @@ pipeline {
             }
         }
 
+        
+
+        stage('Test') {
+            steps {
+                script {
+                    // Run the unit tests
+                    sh '${BUILD_DIR}/unit_test'
+                }
+            }
+        }
+
         stage('Cppcheck') {
             steps {
                 script {
@@ -47,15 +58,6 @@ pipeline {
                 }
                 // Publish Cppcheck results
                 publishCppcheck pattern: 'cppcheck.xml'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    // Run the unit tests
-                    sh '${BUILD_DIR}/unit_test'
-                }
             }
         }
 
