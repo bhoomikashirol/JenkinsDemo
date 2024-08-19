@@ -67,14 +67,8 @@ pipeline {
                         // Initialize Git repository if not already initialized
                         sh 'git init'
                         
-                        // Check if remote origin already exists and update it if necessary
-                        sh '''
-                        if git remote | grep -q origin; then
-                            git remote set-url origin ${REPO_URL}
-                        else
-                            git remote add origin ${REPO_URL}
-                        fi
-                        '''
+                        // Add remote repository
+                        sh 'git remote add origin ${REPO_URL}'
                         
                         // Add files to staging area
                         sh 'git add .'
@@ -82,11 +76,8 @@ pipeline {
                         // Commit the changes
                         sh 'git commit -m "Add build folder contents"'
                         
-                        // Create the main branch if it doesn't exist
-                        sh 'git branch -M main'
-                        
                         // Push the changes to the main branch
-                        sh 'git push -u origin main'
+                        sh 'git push origin main'
                     }
                 }
             }
