@@ -60,8 +60,13 @@ pipeline {
                         // Initialize a new Git repository in the build directory
                         sh 'git init'
                         
-                        // Add remote repository
-                        sh 'git remote add origin ${REPO_URL}'
+                        // Check if the remote already exists
+                        def remoteExists = sh(script: 'git remote', returnStdout: true).trim().contains('origin')
+                        
+                        if (!remoteExists) {
+                            // Add remote repository
+                            sh 'git remote add origin ${REPO_URL}'
+                        }
                         
                         // Pull the latest changes from the remote repository with rebase
                         withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
