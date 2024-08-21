@@ -18,6 +18,15 @@ pipeline {
             }
         }
 
+        stage('Clean') {
+            steps {
+                script {
+                    // Clean the build directory
+                    sh 'rm -rf ${BUILD_DIR}'
+                }
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
@@ -58,40 +67,6 @@ pipeline {
                 }
                 // Publish JUnit test results
                 junit '**/test-results/*.xml'
-            }
-        }
-
-        stage('Push to Git') {
-            steps {
-                script {
-                    // Ensure the build directory exists
-                    sh 'mkdir -p ${BUILD_DIR}'
-                    
-                    // Navigate to the build directory
-                    dir("${BUILD_DIR}") {
-                        // Initialize a new Git repository in the build directory
-                        sh 'git init'
-                        
-                        // Check if the remote already exists
-                        def remoteExists = sh(script: 'git remote', returnStdout: true).trim().contains('origin')
-                        
-                        if (!remoteExists) {
-                            // Add remote repository
-                            sh 'git remote add origin ${REPO_URL}'
-                        }
-                        
-                        // Add only the build directory to the staging area
-                        sh 'git add .'
-                        
-                        // Commit the changes
-                        sh 'git commit -m "Add build folder contents"'
-                        
-                        // Force push the changes to the main branch
-                        withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
-                            sh 'git push https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main --force'
-                        }
-                    }
-                }
             }
         }
     }
