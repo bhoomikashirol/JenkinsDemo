@@ -18,31 +18,7 @@ pipeline {
             }
         }
 
-        stage('Check for Changes') {
-            steps {
-                script {
-                    // Fetch the latest changes
-                    sh 'git fetch origin'
-                    
-                    // Check if there are any new changes
-                    def changes = sh(script: 'git diff --name-only HEAD origin/main', returnStdout: true).trim()
-                    
-                    if (changes == '') {
-                        echo 'No changes detected. Skipping build.'
-                        currentBuild.result = 'SUCCESS'
-                        env.SKIP_BUILD = 'true'
-                    } else {
-                        echo 'Changes detected. Proceeding with build.'
-                        env.SKIP_BUILD = 'false'
-                    }
-                }
-            }
-        }
-
         stage('Clean') {
-            when {
-                expression { return env.SKIP_BUILD != 'true' }
-            }
             steps {
                 script {
                     // Clean the build directory
@@ -52,9 +28,6 @@ pipeline {
         }
 
         stage('Build') {
-            when {
-                expression { return env.SKIP_BUILD != 'true' }
-            }
             steps {
                 script {
                     // Create the build directory
@@ -68,9 +41,6 @@ pipeline {
         }
 
         stage('Cppcheck') {
-            when {
-                expression { return env.SKIP_BUILD != 'true' }
-            }
             steps {
                 script {
                     // Run Cppcheck
@@ -82,9 +52,6 @@ pipeline {
         }
 
         stage('Test') {
-            when {
-                expression { return env.SKIP_BUILD != 'true' }
-            }
             steps {
                 script {
                     // Create the test results directory
@@ -100,6 +67,19 @@ pipeline {
                 }
                 // Publish JUnit test results
                 junit '**/test-results/*.xml'
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                // Notify users about the failure
+                emailext (
+                    subject: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                    body: "The build has failed. Please check the Jenkins console output for more details.",
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+                )
             }
         }
     }
