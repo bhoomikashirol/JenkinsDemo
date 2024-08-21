@@ -3,16 +3,17 @@ pipeline {
 
     environment {
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
+        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
-        GIT_CREDENTIALS_ID = 'github-pat' // Replace with your actual credentials ID
+        GIT_CREDENTIALS_ID = 'github-pat' 
     }
 
     stages {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the main branch
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
+                    // Checkout the main and Test branches
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
                 }
             }
         }
@@ -44,17 +45,28 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    // Run the unit tests
-                    sh '${BUILD_DIR}/unit_test'
+                    // Create the test results directory
+                    sh 'mkdir -p ${BUILD_DIR}/test-results'
+                    
+                    // Navigate to the build directory and run the tests
+                    dir("${BUILD_DIR}") {
+                        sh './unit_test --gtest_output=xml:${BUILD_DIR}/test-results/test-results.xml'
+                    }
+                    
+                    // List the contents of the test results directory
+                    sh 'ls -la ${BUILD_DIR}/test-results'
                 }
-                // Publish test results
-                 //junit '**/build/test-results/*.xml'
+                // Publish JUnit test results
+                junit '**/test-results/*.xml'
             }
         }
 
         stage('Push to Git') {
             steps {
                 script {
+                    // Ensure the build directory exists
+                    sh 'mkdir -p ${BUILD_DIR}'
+                    
                     // Navigate to the build directory
                     dir("${BUILD_DIR}") {
                         // Initialize a new Git repository in the build directory
@@ -68,26 +80,15 @@ pipeline {
                             sh 'git remote add origin ${REPO_URL}'
                         }
                         
-                        // Stash any unstaged changes
-                        sh 'git stash'
-                        
-                        // Pull the latest changes from the remote repository with rebase
-                        withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
-                            sh 'git pull --rebase https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
-                        }
-                        
-                        // Apply the stashed changes
-                        sh 'git stash pop'
-                        
-                        // Add files to staging area
+                        // Add only the build directory to the staging area
                         sh 'git add .'
                         
                         // Commit the changes
                         sh 'git commit -m "Add build folder contents"'
                         
-                        // Push the changes to the main branch
+                        // Force push the changes to the main branch
                         withCredentials([string(credentialsId: GIT_CREDENTIALS_ID, variable: 'GIT_TOKEN')]) {
-                            sh 'git push https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main'
+                            sh 'git push https://${GIT_TOKEN}@github.com/bhoomikashirol/JenkinsDemo.git main --force'
                         }
                     }
                 }
@@ -95,4 +96,3 @@ pipeline {
         }
     }
 }
-
