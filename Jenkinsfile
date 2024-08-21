@@ -18,6 +18,26 @@ pipeline {
             }
         }
 
+        stage('Check for Changes') {
+            steps {
+                script {
+                    // Fetch the latest changes
+                    sh 'git fetch origin'
+                    
+                    // Check if there are any new changes
+                    def changes = sh(script: 'git diff --name-only HEAD origin/main', returnStdout: true).trim()
+                    
+                    if (changes == '') {
+                        echo 'No changes detected. Skipping build.'
+                        currentBuild.result = 'SUCCESS'
+                        error('No changes detected')
+                    } else {
+                        echo 'Changes detected. Proceeding with build.'
+                    }
+                }
+            }
+        }
+
         stage('Clean') {
             steps {
                 script {
