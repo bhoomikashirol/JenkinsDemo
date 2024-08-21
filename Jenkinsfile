@@ -69,18 +69,14 @@ pipeline {
                 junit '**/test-results/*.xml'
             }
         }
-        
-        post {
-        failure {
-        script {
-            def payload = "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
-            httpRequest httpMode: 'POST', 
-                        url: 'https://github.com/bhoomikashirol/JenkinsDemo/settings/hooks/497245648', 
-                        requestBody: payload
-            error("Build failed. Stopping the pipeline.")
-                }
-            }
-        }  
     }
-
+    
+    post {
+        failure {
+            script {
+                def payload = "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+                // Add your webhook or notification logic here
+            }
+        }
+    }
 }
