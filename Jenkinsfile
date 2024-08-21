@@ -30,15 +30,19 @@ pipeline {
                     if (changes == '') {
                         echo 'No changes detected. Skipping build.'
                         currentBuild.result = 'SUCCESS'
-                        error('No changes detected')
+                        env.SKIP_BUILD = 'true'
                     } else {
                         echo 'Changes detected. Proceeding with build.'
+                        env.SKIP_BUILD = 'false'
                     }
                 }
             }
         }
 
         stage('Clean') {
+            when {
+                expression { return env.SKIP_BUILD != 'true' }
+            }
             steps {
                 script {
                     // Clean the build directory
@@ -48,6 +52,9 @@ pipeline {
         }
 
         stage('Build') {
+            when {
+                expression { return env.SKIP_BUILD != 'true' }
+            }
             steps {
                 script {
                     // Create the build directory
@@ -61,6 +68,9 @@ pipeline {
         }
 
         stage('Cppcheck') {
+            when {
+                expression { return env.SKIP_BUILD != 'true' }
+            }
             steps {
                 script {
                     // Run Cppcheck
@@ -72,6 +82,9 @@ pipeline {
         }
 
         stage('Test') {
+            when {
+                expression { return env.SKIP_BUILD != 'true' }
+            }
             steps {
                 script {
                     // Create the test results directory
