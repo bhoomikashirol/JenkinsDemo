@@ -75,7 +75,7 @@ pipeline {
         script {
             def payload = "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
             httpRequest httpMode: 'POST', 
-                        url: 'https://your-webhook-url.com', 
+                        url: 'https://github.com/bhoomikashirol/JenkinsDemo/settings/hooks/497245648', 
                         requestBody: payload
             error("Build failed. Stopping the pipeline.")
                 }
