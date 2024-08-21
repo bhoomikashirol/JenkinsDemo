@@ -69,20 +69,18 @@ pipeline {
                 junit '**/test-results/*.xml'
             }
         }
+        
+        post {
+        failure {
+        script {
+            def payload = "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+            httpRequest httpMode: 'POST', 
+                        url: 'https://your-webhook-url.com', 
+                        requestBody: payload
+            error("Build failed. Stopping the pipeline.")
+                }
+            }
+        }  
     }
 
-    post {
-        failure {
-            script {
-                // Notify users about the failure
-                emailext (
-                    subject: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                    body: "The build has failed. Please check the Jenkins console output for more details.",
-                    recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-                )
-                // Stop the pipeline
-                error("Build failed. Stopping the pipeline.")
-            }
-        }
-    }
 }
