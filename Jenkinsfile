@@ -64,12 +64,15 @@ pipeline {
             }
         }
     }
-    
+
     post {
         failure {
             script {
-                def payload = "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
-                // Add your webhook or notification logic here
+                // Call the webhook to notify about the failure
+                sh 'curl -X POST -H "Content-Type: application/json" -d \'{"text": "Build failed for ${env.JOB_NAME} #${env.BUILD_NUMBER}"}\' https://github.com/bhoomikashirol/JenkinsDemo/settings/hooks/497245648'
+
+                // Stop further steps
+                error("Build failed, stopping further steps.")
             }
         }
     }
