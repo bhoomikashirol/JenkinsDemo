@@ -5,7 +5,8 @@ pipeline {
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
         TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
-        GIT_CREDENTIALS_ID = 'github-pat' 
+        GIT_CREDENTIALS_ID = 'github-pat'
+        DOCKER_IMAGE = 'jenkins-demo:latest'
     }
 
     stages {
@@ -63,16 +64,22 @@ pipeline {
                 junit '**/test-results/*.xml'
             }
         }
-    }
 
-    post {
-        failure {
-            script {
-                // Call the webhook to notify about the failure
-                sh 'curl -X POST -H "Content-Type: application/json" -d \'{"text": "Build failed for ${env.JOB_NAME} #${env.BUILD_NUMBER}"}\' https://github.com/bhoomikashirol/JenkinsDemo/settings/hooks/497245648'
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the Docker image
+                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                }
+            }
+        }
 
-                // Stop further steps
-                error("Build failed, stopping further steps.")
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run the Docker container
+                    sh 'docker run --rm ${DOCKER_IMAGE}'
+                }
             }
         }
     }
