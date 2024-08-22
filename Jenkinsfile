@@ -18,18 +18,12 @@ pipeline {
             }
         }
 
-        stage('Clean') {
+        stage('Build and Clean') {
             steps {
                 script {
                     // Clean the build directory
                     sh 'rm -rf ${BUILD_DIR}'
-                }
-            }
-        }
-
-        stage('Build') {
-            steps {
-                script {
+                    
                     // Create the build directory
                     sh 'mkdir -p ${BUILD_DIR}'
                     
