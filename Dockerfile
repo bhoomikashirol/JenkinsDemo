@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 RUN cmake -S . -B build && cmake --build build
 
 # Copy the unit_test executable to the working directory
-RUN cp build/unit_test /app/
+COPY /var/lib/jenkins/workspace/PipelineDemo/build/unit_test /app/
 
 # Run the specified command within the container
 CMD ["./unit_test"]
