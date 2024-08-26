@@ -15,14 +15,14 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 include_directories(inc)
 
 # Include Dependent Libraries
-add_subdirectory(/var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/googletest-main)
+add_subdirectory(/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/googletest-main)
 
 # Main Post Processing Code
-set(MAIN_SRC /var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/src/Code.cpp)
+set(MAIN_SRC /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/src/Code.cpp)
 
 # UNIT_TEST
-set(UT_SRC /var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/test/UT/UT.cpp)
+set(UT_SRC /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT/UT.cpp)
 
 # Gtest - UT
 add_executable(unit_test ${UT_SRC} ${MAIN_SRC})
-target_link_libraries(unit_test GTest::gtest_main GTest::gmock_main)
+target_link_libraries(unit_test GTest::gtest_main GTest::gmock_main) 
