@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
-        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT"
+        BUILD_DIR = "/var/lib/jenkins/workspace/docker-integrate/build"
+        TEST_DIR = "/var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/test/UT"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
         GIT_CREDENTIALS_ID = 'github-pat'
     }
