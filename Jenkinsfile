@@ -12,8 +12,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout the main and Test branches
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
+                    // Checkout the main branch
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])
                 }
             }
         }
