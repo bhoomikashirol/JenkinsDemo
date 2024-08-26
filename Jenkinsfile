@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        BUILD_DIR = "/var/lib/jenkins/workspace/docker-integrate/build"
-        TEST_DIR = "/var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/test/UT"
+        BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"
+        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
         GIT_CREDENTIALS_ID = 'github-pat'
     }
@@ -60,17 +60,7 @@ pipeline {
                     sh 'ls -la ${BUILD_DIR}/test-results'
                 }
                 // Publish JUnit test results
-                junit '${BUILD_DIR}/test-results/*.xml'
-            }
-        }
-
-        stage('Docker Build and Publish') {
-            steps {
-                script {
-                    // Build and publish Docker image
-                    sh 'docker build -t bhoomika30/helloworld:${BUILD_NUMBER} .'
-                    sh 'docker push bhoomika30/helloworld:${BUILD_NUMBER}'
-                }
+                junit '**/test-results/*.xml'
             }
         }
     }
