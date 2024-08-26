@@ -60,7 +60,17 @@ pipeline {
                     sh 'ls -la ${BUILD_DIR}/test-results'
                 }
                 // Publish JUnit test results
-                junit '**/test-results/*.xml'
+                junit '${BUILD_DIR}/test-results/*.xml'
+            }
+        }
+
+        stage('Docker Build and Publish') {
+            steps {
+                script {
+                    // Build and publish Docker image
+                    sh 'docker build -t bhoomika30/helloworld:${BUILD_NUMBER} .'
+                    sh 'docker push bhoomika30/helloworld:${BUILD_NUMBER}'
+                }
             }
         }
     }
