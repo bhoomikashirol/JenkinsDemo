@@ -6,6 +6,8 @@ pipeline {
         TEST_DIR = "/var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/test/UT"
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"
         GIT_CREDENTIALS_ID = 'github-pat'
+        dockerImage = ''
+        registry = 'bhoomika30/helloworld'
     }
 
     stages {
@@ -61,6 +63,14 @@ pipeline {
                 }
                 // Publish JUnit test results
                 junit '**/test-results/*.xml'
+            }
+        }
+
+        stage('Build Docker Image'){
+            steps{
+                script{
+                    dockerImage = docker.build registry
+                }
             }
         }
     }
