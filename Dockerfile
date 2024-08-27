@@ -17,16 +17,16 @@ RUN apt-get update && \
 USER jenkins
 
 # Set environment variables
-ENV BUILD_DIR="/var/lib/jenkins/workspace/docker-integrate/build"
-ENV TEST_DIR="/var/lib/jenkins/workspace/docker-integrate/Test/CRC_UT/test/UT"
+ENV BUILD_DIR="/var/lib/jenkins/workspace/PipelineDemo/build"
+ENV TEST_DIR="/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT"
 ENV REPO_URL="https://github.com/bhoomikashirol/JenkinsDemo.git"
 ENV GIT_CREDENTIALS_ID="github-pat"
 
 # Copy the Jenkinsfile into the container
-COPY Jenkinsfile /var/lib/jenkins/workspace/docker-integrate/
+COPY Jenkinsfile /var/lib/jenkins/workspace/PipelineDemo/
 
 # Set the working directory
-WORKDIR /var/lib/jenkins/workspace/docker-integrate/
+WORKDIR /var/lib/jenkins/workspace/PipelineDemo/
 
 # Run the Jenkins pipeline
 CMD ["jenkins-agent"]
