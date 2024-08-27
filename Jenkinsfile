@@ -8,6 +8,7 @@ pipeline {
         GIT_CREDENTIALS_ID = 'github-pat'
         dockerImage = ''
         registry = 'bhoomika30/helloworld'
+        registryCredential = 'dockerhub_id'
     }
 
     stages {
@@ -70,6 +71,16 @@ pipeline {
             steps{
                 script{
                     dockerImage = docker.build registry
+                }
+            }
+        }
+
+        stage ('Upload image into Dockerhub'){
+            steps{
+                script{
+                    docker.withRegistry( '', registryCredential ) {
+            dockerImage.push() 
+                    }
                 }
             }
         }
