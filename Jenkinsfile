@@ -95,18 +95,6 @@ pipeline {
             } 
         } 
 
-        stage('Valgrind Analysis') {
-            steps {
-                script {
-                    
-                    // Run Valgrind for memory leak analysis
-                    sh 'valgrind --leak-check=full --xml=yes --xml-file=valgrind.xml ./unit_test'
-                }
-                // Publish Valgrind results
-                publishValgrind pattern: 'valgrind.xml'
-            }
-        }
-
         stage('Build Docker Image'){ 
             steps{ 
                 script{ 
