@@ -26,21 +26,26 @@ pipeline {
         } 
 
         stage('Build and Clean') { 
-            steps { 
-                script { 
-                    // Clean the build directory 
-                    sh 'rm -rf ${BUILD_DIR}' 
-                     
-                    // Create the build directory 
-                    sh 'mkdir -p ${BUILD_DIR}' 
-                     
-                    // Run CMake and build 
-                    dir("${BUILD_DIR}") {
-                        sh 'cmake -S .. -B .' 
-                        sh 'cmake --build .' 
+            parallel {
+                stage('Clean Build Directory') {
+                    steps {
+                        script {
+                            sh 'rm -rf ${BUILD_DIR}'
+                            sh 'mkdir -p ${BUILD_DIR}'
+                        }
                     }
-                } 
-            } 
+                }
+                stage('Run CMake and Build') {
+                    steps {
+                        script {
+                            dir("${BUILD_DIR}") {
+                                sh 'cmake -S .. -B .'
+                                sh 'cmake --build .'
+                            }
+                        }
+                    }
+                }
+            }
         } 
 
         stage('Cppcheck') { 
@@ -95,22 +100,25 @@ pipeline {
             } 
         } 
 
-        stage('Build Docker Image'){ 
-            steps{ 
-                script{ 
-                    dockerImage = docker.build registry 
-                } 
-            } 
-        } 
-
-        stage ('Upload image into Dockerhub'){ 
-            steps{ 
-                script{ 
-                    docker.withRegistry( '', registryCredential ) { 
-                        dockerImage.push()  
-                    } 
-                } 
-            } 
-        } 
+        stage('Build and Upload Docker Images') {
+            parallel {
+                stage('Build Docker Image') {
+                    steps {
+                        script {
+                            dockerImage = docker.build(registry)
+                        }
+                    }
+                }
+                stage('Upload Docker Image') {
+                    steps {
+                        script {
+                            docker.withRegistry('', registryCredential) {
+                                dockerImage.push()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     } 
 }
