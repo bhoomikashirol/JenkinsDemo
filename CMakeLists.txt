@@ -23,6 +23,13 @@ set(MAIN_SRC /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/src/Code.cpp)
 # UNIT_TEST
 set(UT_SRC /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT/UT.cpp)
 
+# INTEGRATION_TEST
+set(IT_SRC /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/IT/IT.cpp)
+
 # Gtest - UT
 add_executable(unit_test ${UT_SRC} ${MAIN_SRC})
-target_link_libraries(unit_test GTest::gtest_main GTest::gmock_main) 
+target_link_libraries(unit_test GTest::gtest_main GTest::gmock_main)
+
+# Gtest - IT
+add_executable(integration_test ${IT_SRC} ${MAIN_SRC})
+target_link_libraries(integration_test GTest::gtest_main GTest::gmock_main)
