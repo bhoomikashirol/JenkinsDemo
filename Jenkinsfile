@@ -3,7 +3,7 @@ pipeline {
 
     environment { 
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build" 
-        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test" 
+        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/CRC_UT/test" 
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git" 
         GIT_CREDENTIALS_ID = 'github-pat' 
         dockerImage = '' 
