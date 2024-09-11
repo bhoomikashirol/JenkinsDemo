@@ -98,9 +98,6 @@ pipeline {
         stage('Valgrind Analysis') {
             steps {
                 script {
-                    // Install Valgrind
-                    sh 'sudo apt-get update && sudo apt-get install -y valgrind'
-                    
                     // Run Valgrind for memory leak analysis
                     sh 'valgrind --leak-check=full --xml=yes --xml-file=valgrind.xml ./unit_test'
                 }
