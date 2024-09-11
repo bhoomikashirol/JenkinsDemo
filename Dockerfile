@@ -13,20 +13,21 @@ RUN apt-get update && \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Google Test
+RUN git clone https://github.com/google/googletest.git /usr/src/googletest && \
+    cd /usr/src/googletest && \
+    cmake . && \
+    make && \
+    make install
+
 # Switch back to the Jenkins user
 USER jenkins
 
-# Set environment variables
-ENV BUILD_DIR="/var/lib/jenkins/workspace/PipelineDemo/build"
-ENV TEST_DIR="/var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT"
-ENV REPO_URL="https://github.com/bhoomikashirol/JenkinsDemo.git"
-ENV GIT_CREDENTIALS_ID="github-pat"
-
-# Copy the Jenkinsfile into the container
+# Copy the Jenkinsfile into the container (optional, if needed for reference)
 COPY Jenkinsfile /var/lib/jenkins/workspace/PipelineDemo/
 
 # Set the working directory
 WORKDIR /var/lib/jenkins/workspace/PipelineDemo/
 
-# Run the Jenkins pipeline
+# Run the Jenkins agent
 CMD ["jenkins-agent"]
