@@ -25,16 +25,6 @@ pipeline {
             } 
         } 
 
-        stage('Setup Directories') {
-            steps {
-                script {
-                    // Create the Test directory and move CRC_UT into it
-                    sh 'mkdir -p /var/lib/jenkins/workspace/PipelineDemo/Test'
-                    sh 'mv /var/lib/jenkins/workspace/PipelineDemo/CRC_UT /var/lib/jenkins/workspace/PipelineDemo/Test/'
-                }
-            }
-        }
-
         stage('Build and Clean') { 
             steps { 
                 script { 
