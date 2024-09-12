@@ -39,7 +39,7 @@ pipeline {
                     steps {
                         script {
                             dir("${BUILD_DIR}") {
-                                sh 'cmake -S .. -B .'
+                                sh 'cmake -S ${CMAKE_SOURCE_DIR} -B .'
                                 sh 'cmake --build .'
                             }
                         }
