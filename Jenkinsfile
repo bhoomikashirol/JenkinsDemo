@@ -100,6 +100,35 @@ pipeline {
             }
         } 
 
+        stage('Valgrind') {
+            parallel {
+                stage('Valgrind Unit Test') {
+                    steps {
+                        script {
+                            // Run Valgrind for memory leak analysis on unit tests
+                            dir("${BUILD_DIR}") {
+                                sh 'valgrind --leak-check=full --xml=yes --xml-file=valgrind-unit-test-report.xml ./unit_test'
+                            }
+                        }
+                        // Publish Valgrind results
+                        publishValgrind pattern: 'valgrind-unit-test-report.xml'
+                    }
+                }
+                stage('Valgrind Integration Test') {
+                    steps {
+                        script {
+                            // Run Valgrind for memory leak analysis on integration tests
+                            dir("${BUILD_DIR}") {
+                                sh 'valgrind --leak-check=full --xml=yes --xml-file=valgrind-integration-test-report.xml ./integration_test'
+                            }
+                        }
+                        // Publish Valgrind results
+                        publishValgrind pattern: 'valgrind-integration-test-report.xml'
+                    }
+                }
+            }
+        }
+
         stage('Build and Upload Docker Images') {
             parallel {
                 stage('Build Docker Image') {
