@@ -18,13 +18,13 @@ include_directories(inc)
 add_subdirectory(${CMAKE_SOURCE_DIR}/CRC_UT/googletest-main)
 
 # Main Post Processing Code
-set(MAIN_SRC ${CMAKE_SOURCE_DIR}/Test/CRC_UT/src/Code.cpp)
+set(MAIN_SRC ${CMAKE_SOURCE_DIR}/CRC_UT/src/Code.cpp)
 
 # UNIT_TEST
-set(UT_SRC ${CMAKE_SOURCE_DIR}/Test/CRC_UT/test/UT/UT.cpp)
+set(UT_SRC ${CMAKE_SOURCE_DIR}/CRC_UT/test/UT/UT.cpp)
 
 # INTEGRATION_TEST
-set(IT_SRC ${CMAKE_SOURCE_DIR}/Test/CRC_UT/test/IT/IT.cpp)
+set(IT_SRC ${CMAKE_SOURCE_DIR}/CRC_UT/test/IT/IT.cpp)
 
 # Gtest - UT
 add_executable(unit_test ${UT_SRC} ${MAIN_SRC})
