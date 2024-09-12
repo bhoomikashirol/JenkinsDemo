@@ -3,7 +3,7 @@ pipeline {
 
     environment {  
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"  
-        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test"  
+        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/CRC_UT/test"  
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"  
         GIT_CREDENTIALS_ID = 'github-pat'  
         dockerImage = ''  
@@ -57,10 +57,10 @@ pipeline {
         stage('Test Setup') {  
             steps {  
                 script {  
-                    sh 'mkdir -p /var/lib/jenkins/workspace/PipelineDemo/Test'  
+                    sh 'mkdir -p ${TEST_DIR}'  
                     sh 'cp -r /var/lib/jenkins/workspace/PipelineDemo/CRC_UT /var/lib/jenkins/workspace/PipelineDemo/Test/'  
-                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT'
-                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/IT'
+                    sh 'ls -la ${TEST_DIR}/UT'
+                    sh 'ls -la ${TEST_DIR}/IT'
                 }  
             }  
         }  
