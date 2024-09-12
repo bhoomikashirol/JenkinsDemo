@@ -15,10 +15,7 @@ pipeline {
         stage('Checkout') {  
             steps {  
                 script {  
-                    // Checkout the main branch  
                     checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])  
-
-                    // Merge the Test branch into the main branch 
                     sh 'git checkout main' 
                     sh 'git merge origin/Test' 
                 }  
@@ -51,10 +48,8 @@ pipeline {
         stage('Cppcheck') {  
             steps {  
                 script {  
-                    // Run Cppcheck  
                     sh 'cppcheck --enable=all --xml --xml-version=2 . 2> cppcheck.xml'  
                 }  
-                // Publish Cppcheck results  
                 publishCppcheck pattern: 'cppcheck.xml'  
             }  
         }  
@@ -62,14 +57,10 @@ pipeline {
         stage('Test Setup') {  
             steps {  
                 script {  
-                    // Create the Test directory
                     sh 'mkdir -p /var/lib/jenkins/workspace/PipelineDemo/Test'  
-
-                    // Copy the CRC_UT folder into the Test directory
                     sh 'cp -r /var/lib/jenkins/workspace/PipelineDemo/CRC_UT /var/lib/jenkins/workspace/PipelineDemo/Test/'  
-
-                    // List the contents of the Test directory to verify
-                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT'  
+                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/UT'
+                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT/test/IT'
                 }  
             }  
         }  
@@ -79,36 +70,24 @@ pipeline {
                 stage('Unit Test') {  
                     steps {  
                         script {  
-                            // Create the test results directory  
                             sh 'mkdir -p ${BUILD_DIR}/test-results/unit'  
-                              
-                            // Navigate to the build directory and run the unit tests  
                             dir("${BUILD_DIR}") {  
                                 sh './unit_test --gtest_output=xml:${BUILD_DIR}/test-results/unit/test-results.xml'  
                             }  
-                              
-                            // List the contents of the unit test results directory  
                             sh 'ls -la ${BUILD_DIR}/test-results/unit'  
                         }  
-                        // Publish JUnit test results  
                         junit '**/test-results/unit/*.xml'  
                     }  
                 } 
                 stage('Integration Test') {  
                     steps {  
                         script {  
-                            // Create the test results directory  
                             sh 'mkdir -p ${BUILD_DIR}/test-results/integration'  
-                              
-                            // Navigate to the build directory and run the integration tests  
                             dir("${BUILD_DIR}") {  
                                 sh './integration_test --gtest_output=xml:${BUILD_DIR}/test-results/integration/test-results.xml'  
                             }  
-                              
-                            // List the contents of the integration test results directory  
                             sh 'ls -la ${BUILD_DIR}/test-results/integration'  
                         }  
-                        // Publish JUnit test results  
                         junit '**/test-results/integration/*.xml'  
                     }  
                 }  
