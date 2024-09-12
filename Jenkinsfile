@@ -63,13 +63,13 @@ pipeline {
             steps {  
                 script {  
                     // Create the Test directory
-                    sh 'mkdir -p ${TEST_DIR}/CRC_UT'  
+                    sh 'mkdir -p /var/lib/jenkins/workspace/PipelineDemo/Test'  
 
                     // Copy the CRC_UT folder into the Test directory
-                    sh 'cp -r CRC_UT ${TEST_DIR}/'  
+                    sh 'cp -r /var/lib/jenkins/workspace/PipelineDemo/CRC_UT /var/lib/jenkins/workspace/PipelineDemo/Test/'  
 
                     // List the contents of the Test directory to verify
-                    sh 'ls -la ${TEST_DIR}/CRC_UT'  
+                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/Test/CRC_UT'  
                 }  
             }  
         }  
