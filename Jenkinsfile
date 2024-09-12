@@ -1,9 +1,8 @@
-pipeline {  
+\pipeline {  
     agent any  
 
     environment {  
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"  
-        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/CRC_UT/test"  
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"  
         GIT_CREDENTIALS_ID = 'github-pat'  
         dockerImage = ''  
@@ -51,17 +50,6 @@ pipeline {
                     sh 'cppcheck --enable=all --xml --xml-version=2 . 2> cppcheck.xml'  
                 }  
                 publishCppcheck pattern: 'cppcheck.xml'  
-            }  
-        }  
-
-        stage('Test Setup') {  
-            steps {  
-                script {  
-                    sh 'mkdir -p ${TEST_DIR}'  
-                    sh 'cp -r /var/lib/jenkins/workspace/PipelineDemo/CRC_UT /var/lib/jenkins/workspace/PipelineDemo/Test/'  
-                    sh 'ls -la ${TEST_DIR}/UT'
-                    sh 'ls -la ${TEST_DIR}/IT'
-                }  
             }  
         }  
 
