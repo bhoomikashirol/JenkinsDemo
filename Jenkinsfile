@@ -26,7 +26,7 @@ pipeline {
         } 
 
         stage('Build and Clean') { 
-            parallel {
+            parallel (
                 stage('Clean Build Directory') {
                     steps {
                         script {
@@ -34,7 +34,7 @@ pipeline {
                             sh 'mkdir -p ${BUILD_DIR}'
                         }
                     }
-                }
+                },
                 stage('Run CMake and Build') {
                     steps {
                         script {
@@ -45,7 +45,7 @@ pipeline {
                         }
                     }
                 }
-            }
+            )
         } 
 
         stage('Cppcheck') { 
@@ -60,7 +60,7 @@ pipeline {
         } 
 
         stage('Test') { 
-            parallel { 
+            parallel (
                 stage('Unit Test') { 
                     steps { 
                         script { 
@@ -78,7 +78,7 @@ pipeline {
                         // Publish JUnit test results 
                         junit '**/test-results/unit/*.xml' 
                     } 
-                } 
+                },
                 stage('Integration Test') { 
                     steps { 
                         script { 
@@ -97,18 +97,18 @@ pipeline {
                         junit '**/test-results/integration/*.xml' 
                     } 
                 } 
-            } 
+            )
         } 
 
         stage('Build and Upload Docker Images') {
-            parallel {
+            parallel (
                 stage('Build Docker Image') {
                     steps {
                         script {
                             dockerImage = docker.build(registry)
                         }
                     }
-                }
+                },
                 stage('Upload Docker Image') {
                     steps {
                         script {
@@ -118,7 +118,7 @@ pipeline {
                         }
                     }
                 }
-            }
+            )
         }
     } 
 }
