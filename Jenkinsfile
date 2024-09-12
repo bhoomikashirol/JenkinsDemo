@@ -94,6 +94,29 @@ pipeline {
             } 
         }  
 
+        stage('Valgrind Analysis') {
+            parallel {
+                stage('Valgrind Unit Test') {
+                    steps {
+                        script {
+                            sh 'valgrind --leak-check=full --xml=yes --xml-file=${BUILD_DIR}/test-results/unit/valgrind.xml ./unit_test'
+                            sh 'ls -la ${BUILD_DIR}/test-results/unit'
+                        }
+                        publishValgrind pattern: '**/build/test-results/unit/valgrind.xml'
+                    }
+                }
+                stage('Valgrind Integration Test') {
+                    steps {
+                        script {
+                            sh 'valgrind --leak-check=full --xml=yes --xml-file=${BUILD_DIR}/test-results/integration/valgrind.xml ./integration_test'
+                            sh 'ls -la ${BUILD_DIR}/test-results/integration'
+                        }
+                        publishValgrind pattern: '**/build/test-results/integration/valgrind.xml'
+                    }
+                }
+            }
+        }
+
         stage('Build and Upload Docker Images') { 
             parallel { 
                 stage('Build Docker Image') { 
