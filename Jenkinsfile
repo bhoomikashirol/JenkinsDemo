@@ -105,6 +105,8 @@ pipeline {
                 stage('Valgrind Unit Test') {
                     steps {
                         script {
+                            // Clean workspace before running Valgrind
+                            cleanWs()
                             // Run Valgrind for memory leak analysis on unit tests
                             dir("${BUILD_DIR}") {
                                 sh 'valgrind --leak-check=full --xml=yes --xml-file=valgrind-unit-test-report.xml ./unit_test'
@@ -117,6 +119,8 @@ pipeline {
                 stage('Valgrind Integration Test') {
                     steps {
                         script {
+                            // Clean workspace before running Valgrind
+                            cleanWs()
                             // Run Valgrind for memory leak analysis on integration tests
                             dir("${BUILD_DIR}") {
                                 sh 'valgrind --leak-check=full --xml=yes --xml-file=valgrind-integration-test-report.xml ./integration_test'
