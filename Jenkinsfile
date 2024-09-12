@@ -16,17 +16,21 @@ pipeline {
             steps {  
                 script {  
                     // Checkout the main branch 
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]]) 
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]]) 
                     
                     // Print current branches
                     sh 'git branch -a'
                     
                     // Merge the Test branch into the main branch
                     sh 'git checkout main'
+                    sh 'git pull origin main'
                     sh 'git merge origin/Test'
                     
                     // Print the status after merge
                     sh 'git status'
+                    
+                    // List the contents of the workspace to verify the merge
+                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo'
                 }  
             }  
         }  
