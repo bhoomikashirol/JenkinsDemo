@@ -26,32 +26,25 @@ pipeline {
 
     stages {  
 
-        stage('Checkout') {  
-
-            steps {  
-
-                script {  
-
-                    // Checkout the main branch  
-
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])  
-
-                     
-
-                    // Merge the Test branch into the main branch 
-
-                    sh 'git checkout main' 
-
-                    sh 'git merge origin/Test' 
-
-                }  
-
-            }  
-
-        }  
-
+        stage('Checkout') { 
+    steps { 
+        script { 
+            // Checkout the main branch 
+            checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]]) 
+            
+            // Print current branches
+            sh 'git branch -a'
+            
+            // Merge the Test branch into the main branch
+            sh 'git checkout main'
+            sh 'git merge origin/Test'
+            
+            // Print the status after merge
+            sh 'git status'
+        } 
+    } 
+}
   
-
         stage('Build and Clean') {  
 
             parallel { 
