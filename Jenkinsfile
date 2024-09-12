@@ -26,7 +26,7 @@ pipeline {
         } 
 
         stage('Build and Clean') { 
-            parallel (
+            parallel {
                 stage('Clean Build Directory') {
                     steps {
                         script {
@@ -45,7 +45,7 @@ pipeline {
                         }
                     }
                 }
-            )
+            }
         } 
 
         stage('Cppcheck') { 
@@ -60,7 +60,7 @@ pipeline {
         } 
 
         stage('Test') { 
-            parallel (
+            parallel {
                 stage('Unit Test') { 
                     steps { 
                         script { 
@@ -97,11 +97,11 @@ pipeline {
                         junit '**/test-results/integration/*.xml' 
                     } 
                 } 
-            )
+            }
         } 
 
         stage('Build and Upload Docker Images') {
-            parallel (
+            parallel {
                 stage('Build Docker Image') {
                     steps {
                         script {
@@ -118,7 +118,7 @@ pipeline {
                         }
                     }
                 }
-            )
+            }
         }
     } 
 }
