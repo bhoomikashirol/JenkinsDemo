@@ -3,7 +3,7 @@ pipeline {
 
     environment {  
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"  
-        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/CRC_UT/test"  
+        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test"  
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"  
         GIT_CREDENTIALS_ID = 'github-pat'  
         dockerImage = ''  
@@ -15,22 +15,12 @@ pipeline {
         stage('Checkout') {  
             steps {  
                 script {  
-                    // Checkout the main branch 
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]]) 
-                    
-                    // Print current branches
-                    sh 'git branch -a'
-                    
-                    // Merge the Test branch into the main branch
-                    sh 'git checkout main'
-                    sh 'git pull origin main'
-                    sh 'git merge origin/Test'
-                    
-                    // Print the status after merge
-                    sh 'git status'
-                    
-                    // List the contents of the workspace to verify the merge
-                    sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo'
+                    // Checkout the main branch  
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main'], [name: '*/Test']], userRemoteConfigs: [[url: REPO_URL, credentialsId: GIT_CREDENTIALS_ID]]])  
+
+                    // Merge the Test branch into the main branch 
+                    sh 'git checkout main' 
+                    sh 'git merge origin/Test' 
                 }  
             }  
         }  
@@ -49,9 +39,6 @@ pipeline {
                     steps { 
                         script { 
                             dir("${BUILD_DIR}") { 
-                                sh 'pwd'
-                                sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/CRC_UT/test/UT'
-                                sh 'ls -la /var/lib/jenkins/workspace/PipelineDemo/CRC_UT/test/IT'
                                 sh 'cmake -S .. -B .' 
                                 sh 'cmake --build .' 
                             } 
@@ -72,7 +59,22 @@ pipeline {
             }  
         }  
 
-        stage('Test') {  
+        stage('Test Setup') {  
+            steps {  
+                script {  
+                    // Create the Test directory
+                    sh 'mkdir -p ${TEST_DIR}/CRC_UT'  
+
+                    // Copy the CRC_UT folder into the Test directory
+                    sh 'cp -r CRC_UT ${TEST_DIR}/'  
+
+                    // List the contents of the Test directory to verify
+                    sh 'ls -la ${TEST_DIR}/CRC_UT'  
+                }  
+            }  
+        }  
+
+        stage('Run Tests') {  
             parallel { 
                 stage('Unit Test') {  
                     steps {  
