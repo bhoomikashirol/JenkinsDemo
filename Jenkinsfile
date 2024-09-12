@@ -76,7 +76,7 @@ pipeline {
                             }  
                             sh 'ls -la ${BUILD_DIR}/test-results/unit'  
                         }  
-                        junit '**/test-results/unit/*.xml'  
+                        junit '**/build/test-results/unit/test-results.xml'  
                     }  
                 } 
                 stage('Integration Test') {  
@@ -88,7 +88,7 @@ pipeline {
                             }  
                             sh 'ls -la ${BUILD_DIR}/test-results/integration'  
                         }  
-                        junit '**/test-results/integration/*.xml'  
+                        junit '**/build/test-results/integration/test-results.xml'  
                     }  
                 }  
             } 
