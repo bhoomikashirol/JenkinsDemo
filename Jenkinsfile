@@ -3,6 +3,7 @@ pipeline {
 
     environment {  
         BUILD_DIR = "/var/lib/jenkins/workspace/PipelineDemo/build"  
+        TEST_DIR = "/var/lib/jenkins/workspace/PipelineDemo/Test"  
         REPO_URL = "https://github.com/bhoomikashirol/JenkinsDemo.git"  
         GIT_CREDENTIALS_ID = 'github-pat'  
         dockerImage = ''  
@@ -21,6 +22,17 @@ pipeline {
             }  
         }  
 
+        stage('Setup Test Directory') {  
+            steps {  
+                script {  
+                    sh 'mkdir -p ${TEST_DIR}'  
+                    sh 'cp -r ${WORKSPACE}/CRC_UT ${TEST_DIR}/'  
+                    sh 'ls -la ${TEST_DIR}/CRC_UT/test/UT'
+                    sh 'ls -la ${TEST_DIR}/CRC_UT/test/IT'
+                }  
+            }  
+        }  
+
         stage('Build and Clean') {  
             parallel { 
                 stage('Clean Build Directory') { 
@@ -35,8 +47,8 @@ pipeline {
                     steps { 
                         script { 
                             dir("${BUILD_DIR}") { 
-                                sh 'cmake -S .. -B .' 
-                                sh 'cmake --build .' 
+                                sh 'cmake -S ${WORKSPACE} -B ${BUILD_DIR}' 
+                                sh 'cmake --build ${BUILD_DIR}' 
                             } 
                         } 
                     } 
