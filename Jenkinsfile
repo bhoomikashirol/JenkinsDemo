@@ -100,8 +100,10 @@ pipeline {
                 stage('Valgrind Unit Test') {
                     steps {
                         script {
-                            sh 'valgrind --leak-check=full --xml=yes --xml-file=${BUILD_DIR}/test-results/unit/valgrind.xml ./unit_test'
-                            sh 'ls -la ${BUILD_DIR}/test-results/unit'
+                            dir("${BUILD_DIR}") {
+                                sh 'valgrind --leak-check=full --xml=yes --xml-file=${BUILD_DIR}/test-results/unit/valgrind.xml ./unit_test'
+                                sh 'ls -la ${BUILD_DIR}/test-results/unit'
+                            }
                         }
                         publishValgrind pattern: '**/build/test-results/unit/valgrind.xml'
                     }
@@ -109,8 +111,10 @@ pipeline {
                 stage('Valgrind Integration Test') {
                     steps {
                         script {
-                            sh 'valgrind --leak-check=full --xml=yes --xml-file=${BUILD_DIR}/test-results/integration/valgrind.xml ./integration_test'
-                            sh 'ls -la ${BUILD_DIR}/test-results/integration'
+                            dir("${BUILD_DIR}") {
+                                sh 'valgrind --leak-check=full --xml=yes --xml-file=${BUILD_DIR}/test-results/integration/valgrind.xml ./integration_test'
+                                sh 'ls -la ${BUILD_DIR}/test-results/integration'
+                            }
                         }
                         publishValgrind pattern: '**/build/test-results/integration/valgrind.xml'
                     }
