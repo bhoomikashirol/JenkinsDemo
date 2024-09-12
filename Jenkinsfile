@@ -34,7 +34,7 @@ pipeline {
                             sh 'mkdir -p ${BUILD_DIR}'
                         }
                     }
-                },
+                }
                 stage('Run CMake and Build') {
                     steps {
                         script {
@@ -78,7 +78,7 @@ pipeline {
                         // Publish JUnit test results 
                         junit '**/test-results/unit/*.xml' 
                     } 
-                },
+                }
                 stage('Integration Test') { 
                     steps { 
                         script { 
@@ -108,7 +108,7 @@ pipeline {
                             dockerImage = docker.build(registry)
                         }
                     }
-                },
+                }
                 stage('Upload Docker Image') {
                     steps {
                         script {
