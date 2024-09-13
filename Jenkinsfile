@@ -106,18 +106,16 @@ pipeline {
                             }
                         }
                         publishValgrind pattern: '**/build/test-results/unit/valgrind.xml',
-                            failThresholdInvalidReadWrite: 1,
-                            failThresholdDefinitelyLost: 1,
-                            failThresholdTotal: 1,
-                            unstableThresholdInvalidReadWrite: 1,
-                            unstableThresholdDefinitelyLost: 1,
-                            unstableThresholdTotal: 1,
+                            failThresholdInvalidReadWrite: '1',
+                            failThresholdDefinitelyLost: '1',
+                            failThresholdTotal: '1',
+                            unstableThresholdInvalidReadWrite: '1',
+                            unstableThresholdDefinitelyLost: '1',
+                            unstableThresholdTotal: '1',
                             sourceSubstitutionPaths: '',
                             publishResultsForAbortedBuilds: true,
                             publishResultsForFailedBuilds: true,
-                            failBuildOnMissingReports: true,
-                            stacktracePrefixLines: 10,
-                            stacktraceSuffixLines: 5
+                            failBuildOnMissingReports: true
                     }
                 }
                 stage('Valgrind Integration Test') {
@@ -129,18 +127,16 @@ pipeline {
                             }
                         }
                         publishValgrind pattern: '**/build/test-results/integration/valgrind.xml',
-                            failThresholdInvalidReadWrite: 1,
-                            failThresholdDefinitelyLost: 1,
-                            failThresholdTotal: 1,
-                            unstableThresholdInvalidReadWrite: 1,
-                            unstableThresholdDefinitelyLost: 1,
-                            unstableThresholdTotal: 1,
+                            failThresholdInvalidReadWrite: '1',
+                            failThresholdDefinitelyLost: '1',
+                            failThresholdTotal: '1',
+                            unstableThresholdInvalidReadWrite: '1',
+                            unstableThresholdDefinitelyLost: '1',
+                            unstableThresholdTotal: '1',
                             sourceSubstitutionPaths: '',
                             publishResultsForAbortedBuilds: true,
                             publishResultsForFailedBuilds: true,
-                            failBuildOnMissingReports: true,
-                            stacktracePrefixLines: 10,
-                            stacktraceSuffixLines: 5
+                            failBuildOnMissingReports: true
                     }
                 }
             }
