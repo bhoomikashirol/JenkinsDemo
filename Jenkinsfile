@@ -115,7 +115,8 @@ pipeline {
                             sourceSubstitutionPaths: '',
                             publishResultsForAbortedBuilds: true,
                             publishResultsForFailedBuilds: true,
-                            failBuildOnMissingReports: true
+                            failBuildOnMissingReports: true,
+                            failBuildOnInvalidReports: true
                     }
                 }
                 stage('Valgrind Integration Test') {
@@ -136,7 +137,8 @@ pipeline {
                             sourceSubstitutionPaths: '',
                             publishResultsForAbortedBuilds: true,
                             publishResultsForFailedBuilds: true,
-                            failBuildOnMissingReports: true
+                            failBuildOnMissingReports: true,
+                            failBuildOnInvalidReports: true
                     }
                 }
             }
